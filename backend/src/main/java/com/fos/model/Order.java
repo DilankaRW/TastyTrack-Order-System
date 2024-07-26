@@ -3,13 +3,14 @@ package com.fos.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.List;
 
 @Entity
-@lombok.Data
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "orders")
@@ -26,7 +27,7 @@ public class Order {
 
     private Long totalAmount;
     private String orderStatus;
-    private Data createdAt;
+    private Date createdAt;
 
     @ManyToOne
     private Address deliveryAddress;
