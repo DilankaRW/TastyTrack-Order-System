@@ -98,10 +98,10 @@ public class AuthController {
         UserDetails userDetails = customerUserDetailsService.loadUserByUsername(username);
 
         if (userDetails == null){
-            throw new BadCredentialsException("invalid username.");
+            throw new BadCredentialsException("invalid username...");
         }
         if (!passwordEncoder.matches(password, userDetails.getPassword())){
-            throw new BadCredentialsException("invalid username.");
+            throw new BadCredentialsException("invalid password...");
         }
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
