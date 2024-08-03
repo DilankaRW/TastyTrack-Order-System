@@ -1,21 +1,45 @@
 package com.fos.service;
 
 import com.fos.dto.RestaurantDto;
+import com.fos.model.Address;
 import com.fos.model.Restaurant;
 import com.fos.model.User;
+import com.fos.repository.AddressRepository;
 import com.fos.repository.RestaurantRepository;
 import com.fos.request.CreateRestaurantRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @Service
 public class RestaurantServiceImp implements RestaurantService{
     @Autowired
     private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
+    private UserService userService;
+
     @Override
     public Restaurant createRestaurant(CreateRestaurantRequest req, User user) {
-        return null;
+
+        Address address = addressRepository.save(req.getAddress());
+
+        Restaurant restaurant = new Restaurant();
+        restaurant.setAddress(address);
+        restaurant.setContactInformation(req.getContactInformation());
+        restaurant.setCuisineType(req.getCuisineType());
+        restaurant.setDescription(req.getDescription());
+        restaurant.setImages(req.getImages());
+        restaurant.setName(req.getName());
+        restaurant.setOpeningHours(req.getOpeningHours());
+        restaurant.setRegistrationDate(LocalDateTime.now());
+        restaurant.setOwner(user);
+
+        return restaurantRepository.save(restaurant);
     }
 
     @Override
