@@ -27,4 +27,16 @@ public class AdminRestaurantController {
         Restaurant restaurant = restaurantService.createRestaurant(req,user);
         return new ResponseEntity<>(restaurant, HttpStatus.CREATED);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Restaurant> updateRestaurant(
+            @RequestBody CreateRestaurantRequest req,
+            @RequestHeader("Authorization") String jwt,
+            @PathVariable Long id
+    ) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+
+        Restaurant restaurant = restaurantService.updateRestaurant(id,req);
+        return new ResponseEntity<>(restaurant, HttpStatus.CREATED);
+    }
 }
