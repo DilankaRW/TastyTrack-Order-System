@@ -3,6 +3,7 @@ package com.fos.controller;
 import com.fos.model.Restaurant;
 import com.fos.model.User;
 import com.fos.request.CreateRestaurantRequest;
+import com.fos.response.MessageResponse;
 import com.fos.service.RestaurantService;
 import com.fos.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,20 @@ public class AdminRestaurantController {
 
         Restaurant restaurant = restaurantService.updateRestaurant(id,req);
         return new ResponseEntity<>(restaurant, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MessageResponse> deleteRestaurant(
+            @RequestBody CreateRestaurantRequest req,
+            @RequestHeader("Authorization") String jwt,
+            @PathVariable Long id
+    ) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+
+        restaurantService.deleteRestaurant(id);
+
+        MessageResponse res = new MessageResponse();
+        res.setMessage("Restaurant deleted successfully");
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 }
