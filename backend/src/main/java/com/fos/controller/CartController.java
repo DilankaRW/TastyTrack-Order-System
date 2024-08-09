@@ -2,9 +2,11 @@ package com.fos.controller;
 
 import com.fos.model.Cart;
 import com.fos.model.CartItem;
+import com.fos.model.User;
 import com.fos.request.AddCartItemRequest;
 import com.fos.request.UpdateCartItemRequest;
 import com.fos.service.CartService;
+import com.fos.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,9 @@ public class CartController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private UserService userService;
 
     @PutMapping("/cart/add")
     public ResponseEntity<CartItem> addItemToCart(@RequestBody AddCartItemRequest req,
@@ -36,14 +41,23 @@ public class CartController {
     public ResponseEntity<Cart> removeCartItem(
             @PathVariable Long id,
             @RequestHeader("Authorization") String jwt) throws Exception{
-        Cart cart = cartService.removeItemFromCart(id, jwt);
+        Cart cart = cartService.removeItemFromCart(id,jwt);
+        return new ResponseEntity<>(cart,HttpStatus.OK);
+    }
+
+    @PutMapping("/cart/clear")
+    public ResponseEntity<Cart> clearCart(
+            @RequestHeader("Authorization") String jwt) throws Exception{
+        User user = userService.findUserByJwtToken(jwt);
+        Cart cart = cartService.clearCart(user.getId());
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
     @GetMapping("/cart")
     public ResponseEntity<Cart> findUserCart(
             @RequestHeader("Authorization") String jwt) throws Exception{
-        Cart cart = cartService.findCartByUserId(jwt);
+        User user = userService.findUserByJwtToken(jwt);
+        Cart cart = cartService.findCartByUserId(user.getId());
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
