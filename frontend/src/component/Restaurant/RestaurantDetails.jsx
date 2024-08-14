@@ -10,6 +10,7 @@ import {
 import React, { useState } from "react";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import MenuCard from "./MenuCard";
 
 const categories=[
   "pizza", "biryani", "burger", "chiken", "rice"
@@ -21,6 +22,8 @@ const foodTypes=[
   {label:"Non-Vegetarian", value:"non_vegetarian"},
   {label:"Seasonal", value:"seasonal"}
 ]
+
+const menu = [1,1,1,1,1,1,]
 
 const RestaurantDetails = () => {
   const [foodType, setFoodType] = useState("all")
@@ -103,7 +106,9 @@ const RestaurantDetails = () => {
             </div>
           </div>
         </div>
-        <div className="space-y-5 lg:w-[80%] lg:pl-10">Menu</div>
+        <div className="space-y-5 lg:w-[80%] lg:pl-10">
+          {menu.map((item)=><MenuCard/>)}
+        </div>
       </section>
     </div>
   );
