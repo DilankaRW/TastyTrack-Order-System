@@ -23,8 +23,7 @@ const foodTypes=[
 ]
 
 const RestaurantDetails = () => {
-
-  const [foodTyoe, setFoodType] = useState("all")
+  const [foodType, setFoodType] = useState("all")
   const handleFilter = (e) => {
     console.log(e.target.value,e.target.name)
   }
@@ -86,7 +85,7 @@ const RestaurantDetails = () => {
                 Food Type
               </Typography>
               <FormControl className="py-10 space-y-5" component={"fieldset"}>
-                <RadioGroup onChange={handleFilter} name="food_type" value={foodTypes}>
+                <RadioGroup onChange={handleFilter} name="food_type" value={foodType}>
                   {foodTypes.map((item)=><FormControlLabel key={item.value} value={item.value} control={<Radio />} label={item.label} />)}
                 </RadioGroup>
               </FormControl>
@@ -97,7 +96,7 @@ const RestaurantDetails = () => {
                 Food Category
               </Typography>
               <FormControl className="py-10 space-y-5" component={"fieldset"}>
-                <RadioGroup onChange={handleFilter} name="food_type" value={foodTypes}>
+                <RadioGroup onChange={handleFilter} name="food_type" value={foodType}>
                   {categories.map((item)=><FormControlLabel key={item} value={item} control={<Radio />} label={item} />)}
                 </RadioGroup>
               </FormControl>
