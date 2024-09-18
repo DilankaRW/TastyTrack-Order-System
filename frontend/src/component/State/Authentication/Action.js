@@ -1,5 +1,5 @@
 import { type } from "@testing-library/user-event/dist/type"
-import { GET_USER_REQUEST, LOGIN_REQUEST, LOGIN_SUCCESS, REGISTER_REQUEST, REGISTER_SUCCESS } from "./Reducer"
+import { ADD_TO_FAVORITE_REQUEST, ADD_TO_FAVORITE_SUCCESS, GET_USER_REQUEST, LOGIN_REQUEST, LOGIN_SUCCESS, REGISTER_REQUEST, REGISTER_SUCCESS } from "./Reducer"
 import axios from "axios"
 import { api, API_URL } from "../../config/api"
 
@@ -40,13 +40,28 @@ export const loginUser=(reqData)=>async(dispatch)=>{
 export const getUser=(jwt)=>async(dispatch)=>{
     dispatch({type:GET_USER_REQUEST})
     try{
-        const {data}=await api.post(`/auth/signin`,{
+        const {data}=await api.get(`/auth/signin`,{
             headers:{
                 Authorization:`Bearer ${jwt}`
             }
         })
-        dispatch({type:LOGIN_SUCCESS,payload:data.jwt})
+        dispatch({type:LOGIN_SUCCESS,payload:data})
         console.log("user profile",data)
+    } catch (error){
+        console.log("error",error)
+    }
+}
+
+export const addToFavorite=({jwt,restaurantId})=>async(dispatch)=>{
+    dispatch({type:ADD_TO_FAVORITE_REQUEST})
+    try{
+        const {data}=await api.put(`/api/restaurant/${restaurantId}/add-favorite`,{},{
+            headers:{
+                Authorization:`Bearer ${jwt}`
+            }
+        })
+        dispatch({type:ADD_TO_FAVORITE_SUCCESS,payload:data})
+        console.log("Favorites",data)
     } catch (error){
         console.log("error",error)
     }
