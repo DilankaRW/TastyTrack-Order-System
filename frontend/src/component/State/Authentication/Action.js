@@ -1,5 +1,5 @@
 import { type } from "@testing-library/user-event/dist/type"
-import { ADD_TO_FAVORITE_REQUEST, ADD_TO_FAVORITE_SUCCESS, GET_USER_REQUEST, LOGIN_REQUEST, LOGIN_SUCCESS, REGISTER_REQUEST, REGISTER_SUCCESS } from "./Reducer"
+import { ADD_TO_FAVORITE_REQUEST, ADD_TO_FAVORITE_SUCCESS, GET_USER_REQUEST, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT, REGISTER_REQUEST, REGISTER_SUCCESS } from "./Reducer"
 import axios from "axios"
 import { api, API_URL } from "../../config/api"
 
@@ -61,7 +61,17 @@ export const addToFavorite=({jwt,restaurantId})=>async(dispatch)=>{
             }
         })
         dispatch({type:ADD_TO_FAVORITE_SUCCESS,payload:data})
-        console.log("Favorites",data)
+        console.log("added to favorite",data)
+    } catch (error){
+        console.log("error",error)
+    }
+}
+
+export const logout=()=>async(dispatch)=>{
+    dispatch({type:ADD_TO_FAVORITE_REQUEST})
+    try{
+        dispatch({type:LOGOUT})
+        console.log("logout success")
     } catch (error){
         console.log("error",error)
     }
