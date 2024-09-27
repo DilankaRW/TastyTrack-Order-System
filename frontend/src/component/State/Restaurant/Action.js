@@ -143,3 +143,28 @@ export const deleteRestaurant = ({ restaurantId, jwt }) => {
     }
   };
 };
+
+export const updateRestaurantStatus = ({ restaurantId, jwt }) => {
+  return async (dispatch) => {
+    dispatch({ type: UPDATE_RESTAURANT_STATUS_REQUEST });
+    try {
+      const res = await api.put(
+        `/api/admin/restaurants/${restaurantId}/status`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+      console.log("restaurant ", res.data);
+      dispatch({ type: UPDATE_RESTAURANT_STATUS_SUCCESS, payload: res.data });
+    } catch (error) {
+      console.log("error ", error);
+      dispatch({
+        type: UPDATE_RESTAURANT_STATUS_FAILURE,
+        payload: error,
+      });
+    }
+  };
+};
