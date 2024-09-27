@@ -5,6 +5,9 @@ import {
   GET_RESTAURANT_BY_ID_FAILURE,
   GET_RESTAURANT_BY_ID_REQUEST,
   GET_RESTAURANT_BY_ID_SUCCESS,
+  GET_RESTAURANT_BY_USER_ID_FAILURE,
+  GET_RESTAURANT_BY_USER_ID_REQUEST,
+  GET_RESTAURANT_BY_USER_ID_SUCCESS,
 } from "./ActionType";
 
 export const getAllRestaurantsAction = (token) => {
@@ -41,6 +44,27 @@ export const getRestaurantById = (reqData) => {
     } catch (error) {
       console.log("error ", error);
       dispatch({ type: GET_RESTAURANT_BY_ID_FAILURE, payload: error });
+    }
+  };
+};
+
+export const getRestaurantByUserId = (jwt) => {
+  return async (dispatch) => {
+    dispatch({ type: GET_RESTAURANT_BY_USER_ID_REQUEST });
+    try {
+      const { data } = await api.get(`/api/admin/restaurants/user`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      console.log("get restaurant by user id ", data);
+      dispatch({ type: GET_RESTAURANT_BY_USER_ID_SUCCESS, payload: data });
+    } catch (error) {
+      console.log("catch error ", error);
+      dispatch({
+        type: GET_RESTAURANT_BY_USER_ID_FAILURE,
+        payload: error.message,
+      });
     }
   };
 };
