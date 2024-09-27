@@ -1,4 +1,7 @@
 import {
+  CREATE_RESTAURANT_FAILURE,
+  CREATE_RESTAURANT_REQUEST,
+  CREATE_RESTAURANT_SUCCESS,
   GET_ALL_RESTAURANT_FAILURE,
   GET_ALL_RESTAURANT_REQUEST,
   GET_ALL_RESTAURANT_SUCCESS,
@@ -64,6 +67,28 @@ export const getRestaurantByUserId = (jwt) => {
       dispatch({
         type: GET_RESTAURANT_BY_USER_ID_FAILURE,
         payload: error.message,
+      });
+    }
+  };
+};
+
+export const createRestaurant = (reqData) => {
+  console.log("token----------", reqData.token);
+  return async (dispatch) => {
+    dispatch({ type: CREATE_RESTAURANT_REQUEST });
+    try {
+      const { data } = await api.post(`/api/admin/restaurants`, reqData.data, {
+        headers: {
+          Authorization: `Bearer ${reqData.token}`,
+        },
+      });
+      dispatch({ type: CREATE_RESTAURANT_SUCCESS, payload: data });
+      console.log("created restaurant ", data);
+    } catch (error) {
+      console.log("catch error ", error);
+      dispatch({
+        type: CREATE_RESTAURANT_FAILURE,
+        payload: error,
       });
     }
   };
