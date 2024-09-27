@@ -2,6 +2,9 @@ import {
   CREATE_RESTAURANT_FAILURE,
   CREATE_RESTAURANT_REQUEST,
   CREATE_RESTAURANT_SUCCESS,
+  DELETE_RESTAURANT_FAILURE,
+  DELETE_RESTAURANT_REQUEST,
+  DELETE_RESTAURANT_SUCCESS,
   GET_ALL_RESTAURANT_FAILURE,
   GET_ALL_RESTAURANT_REQUEST,
   GET_ALL_RESTAURANT_SUCCESS,
@@ -102,7 +105,7 @@ export const updateRestaurant = ({ restaurantId, restaurantData, jwt }) => {
     dispatch({ type: UPDATE_RESTAURANT_STATUS_REQUEST });
     try {
       const res = await api.put(
-        `/api/admin/restaurants/${restaurantId}`,
+        `/api/admin/restaurant/${restaurantId}`,
         restaurantData,
         {
           headers: {
@@ -114,6 +117,27 @@ export const updateRestaurant = ({ restaurantId, restaurantData, jwt }) => {
     } catch (error) {
       dispatch({
         type: UPDATE_RESTAURANT_STATUS_FAILURE,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const deleteRestaurant = ({ restaurantId, jwt }) => {
+  return async (dispatch) => {
+    dispatch({ type: DELETE_RESTAURANT_REQUEST });
+    try {
+      const res = await api.delete(`/api/admin/restaurant/${restaurantId}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      console.log("delete restaurant ", res.data);
+      dispatch({ type: DELETE_RESTAURANT_SUCCESS, payload: restaurantId });
+    } catch (error) {
+      console.log("catch error ", error);
+      dispatch({
+        type: DELETE_RESTAURANT_FAILURE,
         payload: error,
       });
     }
