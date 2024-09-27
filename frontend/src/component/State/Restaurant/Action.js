@@ -11,6 +11,9 @@ import {
   GET_RESTAURANT_BY_USER_ID_FAILURE,
   GET_RESTAURANT_BY_USER_ID_REQUEST,
   GET_RESTAURANT_BY_USER_ID_SUCCESS,
+  UPDATE_RESTAURANT_STATUS_FAILURE,
+  UPDATE_RESTAURANT_STATUS_REQUEST,
+  UPDATE_RESTAURANT_STATUS_SUCCESS,
 } from "./ActionType";
 
 export const getAllRestaurantsAction = (token) => {
@@ -88,6 +91,29 @@ export const createRestaurant = (reqData) => {
       console.log("catch error ", error);
       dispatch({
         type: CREATE_RESTAURANT_FAILURE,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const updateRestaurant = ({ restaurantId, restaurantData, jwt }) => {
+  return async (dispatch) => {
+    dispatch({ type: UPDATE_RESTAURANT_STATUS_REQUEST });
+    try {
+      const res = await api.put(
+        `/api/admin/restaurants/${restaurantId}`,
+        restaurantData,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+      dispatch({ type: UPDATE_RESTAURANT_STATUS_SUCCESS, payload: res.data });
+    } catch (error) {
+      dispatch({
+        type: UPDATE_RESTAURANT_STATUS_FAILURE,
         payload: error,
       });
     }
