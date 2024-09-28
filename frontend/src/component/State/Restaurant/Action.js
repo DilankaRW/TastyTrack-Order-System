@@ -14,12 +14,12 @@ import {
   DELETE_RESTAURANT_FAILURE,
   DELETE_RESTAURANT_REQUEST,
   DELETE_RESTAURANT_SUCCESS,
-  GET_ALL_EVENTS_FAILURE,
-  GET_ALL_EVENTS_REQUEST,
-  GET_ALL_EVENTS_SUCCESS,
-  GET_ALL_RESTAURANT_FAILURE,
-  GET_ALL_RESTAURANT_REQUEST,
-  GET_ALL_RESTAURANT_SUCCESS,
+  GET_EVENTS_FAILURE,
+  GET_EVENTS_REQUEST,
+  GET_EVENTS_SUCCESS,
+  GET_ALL_RESTAURANTS_FAILURE,
+  GET_ALL_RESTAURANTS_REQUEST,
+  GET_ALL_RESTAURANTS_SUCCESS,
   GET_RESTAURANT_BY_ID_FAILURE,
   GET_RESTAURANT_BY_ID_REQUEST,
   GET_RESTAURANT_BY_ID_SUCCESS,
@@ -39,18 +39,18 @@ import {
 
 export const getAllRestaurantsAction = (token) => {
   return async (dispatch) => {
-    dispatch({ type: GET_ALL_RESTAURANT_REQUEST });
+    dispatch({ type: GET_ALL_RESTAURANTS_REQUEST });
     try {
       const { data } = await api.get("/api/restaurants", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      dispatch({ type: GET_ALL_RESTAURANT_SUCCESS, payload: data });
+      dispatch({ type: GET_ALL_RESTAURANTS_SUCCESS, payload: data });
       console.log("all restaurant ", data);
     } catch (error) {
       console.log("catch error ", error);
-      dispatch({ type: GET_ALL_RESTAURANT_FAILURE, payload: error });
+      dispatch({ type: GET_ALL_RESTAURANTS_FAILURE, payload: error });
     }
   };
 };
@@ -214,7 +214,7 @@ export const createEventAction = ({ data, jwt, restaurantId }) => {
 
 export const getAllEvents = ({ jwt }) => {
   return async (dispatch) => {
-    dispatch({ type: GET_ALL_EVENTS_REQUEST });
+    dispatch({ type: GET_EVENTS_REQUEST });
     try {
       const res = await api.get(`/api/events`, {
         headers: {
@@ -222,10 +222,10 @@ export const getAllEvents = ({ jwt }) => {
         },
       });
       console.log("get all events ", res.data);
-      dispatch({ type: GET_ALL_EVENTS_SUCCESS, payload: res.data });
+      dispatch({ type: GET_EVENTS_SUCCESS, payload: res.data });
     } catch (error) {
       dispatch({
-        type: GET_ALL_EVENTS_FAILURE,
+        type: GET_EVENTS_FAILURE,
         payload: error,
       });
     }
