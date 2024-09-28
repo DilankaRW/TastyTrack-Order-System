@@ -1,4 +1,7 @@
 import {
+  CREATE_CATEGORY_FAILURE,
+  CREATE_CATEGORY_REQUEST,
+  CREATE_CATEGORY_SUCCESS,
   CREATE_EVENTS_FAILURE,
   CREATE_EVENTS_REQUEST,
   CREATE_EVENTS_SUCCESS,
@@ -23,6 +26,9 @@ import {
   GET_RESTAURANT_BY_USER_ID_FAILURE,
   GET_RESTAURANT_BY_USER_ID_REQUEST,
   GET_RESTAURANT_BY_USER_ID_SUCCESS,
+  GET_RESTAURANTS_CATEGORY_FAILURE,
+  GET_RESTAURANTS_CATEGORY_REQUEST,
+  GET_RESTAURANTS_CATEGORY_SUCCESS,
   GET_RESTAURANTS_EVENTS_FAILURE,
   GET_RESTAURANTS_EVENTS_REQUEST,
   GET_RESTAURANTS_EVENTS_SUCCESS,
@@ -264,6 +270,47 @@ export const getRestaurantsEvents = ({ restaurantId, jwt }) => {
     } catch (error) {
       dispatch({
         type: GET_RESTAURANTS_EVENTS_FAILURE,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const createCategoryAction = ({ reqData, jwt }) => {
+  return async (dispatch) => {
+    dispatch({ type: CREATE_CATEGORY_REQUEST });
+    try {
+      const res = await api.post(`/api/admin/category`, reqData, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      console.log("create category ", res.data);
+      dispatch({ type: CREATE_CATEGORY_SUCCESS, payload: res.data });
+    } catch (error) {
+      console.log("catch - ", error);
+      dispatch({
+        type: CREATE_CATEGORY_FAILURE,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const getRestaurantsCategory = ({ jwt, restaurantId }) => {
+  return async (dispatch) => {
+    dispatch({ type: GET_RESTAURANTS_CATEGORY_REQUEST });
+    try {
+      const res = await api.get(`/api/category/restaurant/${restaurantId}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      console.log("get restaurants category ", res.data);
+      dispatch({ type: GET_RESTAURANTS_CATEGORY_SUCCESS, payload: res.data });
+    } catch (error) {
+      dispatch({
+        type: GET_RESTAURANTS_CATEGORY_FAILURE,
         payload: error,
       });
     }
