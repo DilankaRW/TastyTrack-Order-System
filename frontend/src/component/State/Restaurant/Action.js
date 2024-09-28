@@ -5,6 +5,9 @@ import {
   CREATE_RESTAURANT_FAILURE,
   CREATE_RESTAURANT_REQUEST,
   CREATE_RESTAURANT_SUCCESS,
+  DELETE_EVENTS_FAILURE,
+  DELETE_EVENTS_REQUEST,
+  DELETE_EVENTS_SUCCESS,
   DELETE_RESTAURANT_FAILURE,
   DELETE_RESTAURANT_REQUEST,
   DELETE_RESTAURANT_SUCCESS,
@@ -20,6 +23,9 @@ import {
   GET_RESTAURANT_BY_USER_ID_FAILURE,
   GET_RESTAURANT_BY_USER_ID_REQUEST,
   GET_RESTAURANT_BY_USER_ID_SUCCESS,
+  GET_RESTAURANTS_EVENTS_FAILURE,
+  GET_RESTAURANTS_EVENTS_REQUEST,
+  GET_RESTAURANTS_EVENTS_SUCCESS,
   UPDATE_RESTAURANT_STATUS_FAILURE,
   UPDATE_RESTAURANT_STATUS_REQUEST,
   UPDATE_RESTAURANT_STATUS_SUCCESS,
@@ -214,6 +220,50 @@ export const getAllEvents = ({ jwt }) => {
     } catch (error) {
       dispatch({
         type: GET_ALL_EVENTS_FAILURE,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const deleteEventAction = ({ eventId, jwt }) => {
+  return async (dispatch) => {
+    dispatch({ type: DELETE_EVENTS_REQUEST });
+    try {
+      const res = await api.delete(`/api/admin/events/${eventId}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      console.log("DELETE events ", res.data);
+      dispatch({ type: DELETE_EVENTS_SUCCESS, payload: eventId });
+    } catch (error) {
+      console.log("catch - ", error);
+      dispatch({
+        type: DELETE_EVENTS_FAILURE,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const getRestaurantsEvents = ({ restaurantId, jwt }) => {
+  return async (dispatch) => {
+    dispatch({ type: GET_RESTAURANTS_EVENTS_REQUEST });
+    try {
+      const res = await api.get(
+        `/api/admin/events/restaurant/${restaurantId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+      console.log("get restaurants event ", res.data);
+      dispatch({ type: GET_RESTAURANTS_EVENTS_SUCCESS, payload: res.data });
+    } catch (error) {
+      dispatch({
+        type: GET_RESTAURANTS_EVENTS_FAILURE,
         payload: error,
       });
     }
