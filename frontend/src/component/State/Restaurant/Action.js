@@ -1,10 +1,16 @@
 import {
+  CREATE_EVENTS_FAILURE,
+  CREATE_EVENTS_REQUEST,
+  CREATE_EVENTS_SUCCESS,
   CREATE_RESTAURANT_FAILURE,
   CREATE_RESTAURANT_REQUEST,
   CREATE_RESTAURANT_SUCCESS,
   DELETE_RESTAURANT_FAILURE,
   DELETE_RESTAURANT_REQUEST,
   DELETE_RESTAURANT_SUCCESS,
+  GET_ALL_EVENTS_FAILURE,
+  GET_ALL_EVENTS_REQUEST,
+  GET_ALL_EVENTS_SUCCESS,
   GET_ALL_RESTAURANT_FAILURE,
   GET_ALL_RESTAURANT_REQUEST,
   GET_ALL_RESTAURANT_SUCCESS,
@@ -163,6 +169,51 @@ export const updateRestaurantStatus = ({ restaurantId, jwt }) => {
       console.log("error ", error);
       dispatch({
         type: UPDATE_RESTAURANT_STATUS_FAILURE,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const createEventAction = ({ data, jwt, restaurantId }) => {
+  return async (dispatch) => {
+    dispatch({ type: CREATE_EVENTS_REQUEST });
+    try {
+      const res = await api.post(
+        `/api/admin/events/restaurants/${restaurantId}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+      console.log("create events ", res.data);
+      dispatch({ type: CREATE_EVENTS_SUCCESS, payload: res.data });
+    } catch (error) {
+      console.log("catch - ", error);
+      dispatch({
+        type: CREATE_EVENTS_FAILURE,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const getAllEvents = ({ jwt }) => {
+  return async (dispatch) => {
+    dispatch({ type: GET_ALL_EVENTS_REQUEST });
+    try {
+      const res = await api.get(`/api/events`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      console.log("get all events ", res.data);
+      dispatch({ type: GET_ALL_EVENTS_SUCCESS, payload: res.data });
+    } catch (error) {
+      dispatch({
+        type: GET_ALL_EVENTS_FAILURE,
         payload: error,
       });
     }
