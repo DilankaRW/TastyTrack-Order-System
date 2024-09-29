@@ -1,13 +1,19 @@
+import { type } from "@testing-library/user-event/dist/type";
 import {
   CREATE_MENU_ITEM_FAILURE,
   CREATE_MENU_ITEM_REQUEST,
   CREATE_MENU_ITEM_SUCCESS,
+  DELETE_MENU_ITEM_FAILURE,
+  DELETE_MENU_ITEM_REQUEST,
+  DELETE_MENU_ITEM_SUCCESS,
   GET_MENU_ITEMS_BY_RESTAURANT_ID_FAILURE,
   GET_MENU_ITEMS_BY_RESTAURANT_ID_REQUEST,
   GET_MENU_ITEMS_BY_RESTAURANT_ID_SUCCESS,
   SEARCH_MENU_ITEM_FAILURE,
   SEARCH_MENU_ITEM_REQUEST,
   SEARCH_MENU_ITEM_SUCCESS,
+  SEARCH_MENU_ITEMS_AVAILABILITY_SUCCESS,
+  UPDATE_MENU_ITEMS_AVAILABILITY_REQUEST,
 } from "./ActionType";
 
 export const createMenuItem = ({ menu, jwt }) => {
@@ -76,3 +82,48 @@ export const searchMenuItem = ({ keyword, jwt }) => {
     }
   };
 };
+
+export const updateMenuItemsAvailability = ({ foodId, jwt }) => {
+  return async (dispatch) => {
+    dispatch({ type: UPDATE_MENU_ITEMS_AVAILABILITY_REQUEST });
+    try {
+      const { data } = await api.put(
+        `/api/admin/food/${foodId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+      console.log("update menuItems Availability", data);
+      dispatch({
+        type: SEARCH_MENU_ITEMS_AVAILABILITY_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      console.log("error ", error);
+      dispatch({
+        type: SEARCH_MENU_ITEM_FAILURE,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const deleteFoodAction =
+  ({ foodId, jwt }) =>
+  async (dispatch) => {
+    dispatch({ type: DELETE_MENU_ITEM_REQUEST });
+    try {
+      const { data } = await api.delete(`/api/admin/food/${foodId}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      console.log("delete food ", data);
+      dispatch({ type: DELETE_MENU_ITEM_SUCCESS, payload: foodId });
+    } catch (error) {
+      dispatch({ type: DELETE_MENU_ITEM_FAILURE, payload: error });
+    }
+  };
