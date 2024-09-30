@@ -8,6 +8,9 @@ import {
   GET_ALL_CART_ITEMS_FAILURE,
   GET_ALL_CART_ITEMS_REQUEST,
   GET_ALL_CART_ITEMS_SUCCESS,
+  REMOVE_CARTITEM_FAILURE,
+  REMOVE_CARTITEM_REQUEST,
+  REMOVE_CARTITEM_SUCCESS,
   UPDATE_CARTITEM_FAILURE,
   UPDATE_CARTITEM_REQUEST,
   UPDATE_CARTITEM_SUCCESS,
@@ -77,6 +80,24 @@ export const updateCartItem = (reqData) => {
     } catch (error) {
       console.log("catch error ", error);
       dispatch({ type: UPDATE_CARTITEM_FAILURE, payload: error.message });
+    }
+  };
+};
+
+export const removeCartItem = ({ cartItemId, jwt }) => {
+  return async (dispatch) => {
+    dispatch({ type: REMOVE_CARTITEM_REQUEST });
+    try {
+      const { data } = await Api.delete(`/api/cart-item/${cartItemId}/remove`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      console.log("remove cartItem ", data);
+      dispatch({ type: REMOVE_CARTITEM_SUCCESS, payload: cartItemId });
+    } catch (error) {
+      console.log("catch error ", error);
+      dispatch({ type: REMOVE_CARTITEM_FAILURE, payload: error.message });
     }
   };
 };
